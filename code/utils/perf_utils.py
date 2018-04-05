@@ -15,7 +15,19 @@ def format_secs(secs, decimal=1) -> str:
 
     Returns
     -------
-    ret: Formatted literal string for the time duration.
+    ret: string
+        Formatted literal string for the time duration.
+
+    Examples
+    --------
+    >>> format_secs(100)
+    '1.7 minutes'
+
+    >>> format_secs(10000)
+    '2.8 hours'
+
+    >>> format_secs(10000, 2)
+    '2.78 hours'
     """
     assert isinstance(secs, int) or isinstance(secs, float)
     assert isinstance(decimal, int)
@@ -30,34 +42,47 @@ def format_secs(secs, decimal=1) -> str:
     return ret
 
 
-def format_memory(num_units, decimal=2, units=None) -> str:
-    """Get formatted literal string for a memory size.
-
-    Parameters
-    ----------
-    num_units: int | float
-        Number of memory units(e.g. Bytes, KB).
-
-    decimal: int
-        Number of decimal places to round to in the literal string.
-
-    units: {"B", "KB", "MB", "GB", "TB"}
-        Unit of memory.
-
-    Returns
-    -------
-    ret: str
-        Formatted literal string for the memory size.
-    """
+def _format_memory(num_units, decimal=2, units=None) -> str:
+    """Helper function to format a memory size"""
     assert num_units >= 0
     assert isinstance(num_units, int) or isinstance(num_units, float)
     assert isinstance(decimal, int)
     units = ['B', 'KB', 'MB', 'GB', "TB"] if units is None else units
-    if num_units < 1024:
+    if num_units < 1024 or len(units) == 1:
         ret = "{}{}".format(round(num_units, decimal), units[0])
     else:
-        ret = format_memory(num_units / 1024.0, decimal, units[1:])
+        ret = _format_memory(num_units / 1024.0, decimal, units[1:])
     return ret
+
+
+def format_memory(num_bytes, decimal=2):
+    """Get formatted literal string for a memory size.
+
+    Parameters
+    ----------
+    num_bytes: int
+        Number of bytes
+
+    decimal: int
+        Number of decimal places to round to in the literal string.
+
+    Returns
+    -------
+    ret: string
+        Formatted literal string for the memory size.
+
+    Examples
+    --------
+    >>> format_memory(10**5)
+    '97.66KB'
+
+    >>> format_memory(10**10, 1)
+    '9.3GB'
+
+    >>> format_memory(10**20)
+    '90949470.18TB'
+    """
+    return _format_memory(num_units=num_bytes, decimal=decimal)
 
 
 def format_memory_diff(num_bytes) -> str:
@@ -72,6 +97,14 @@ def format_memory_diff(num_bytes) -> str:
     -------
     ret: string
         Formatted literal string for the memory difference.
+
+    Examples
+    --------
+    >>> format_memory_diff(2**24)
+    '+16.0MB'
+
+    >>> format_memory_diff(-2**28)
+    '-256.0MB'
     """
     assert isinstance(num_bytes, int)
     sign = '+' if num_bytes >= 0 else '-'
