@@ -1,3 +1,12 @@
 # IDE stuff
 .idea/*
 
+# Jupyter stuff
+**/.ipynb_checkpoints/
+
+# Compiled Python/cache stuff
+*.pyc
+*.pyo
+
+# Personal stuff
+playground/Janzen/data/*
