@@ -1,5 +1,5 @@
 # TencentAlgo2018
-A machine learning competition held by Tencent Social Ads to predict similarity between users: http://algo.qq.com/home/information/info.html
+A machine learning competition held by Tencent Social Ads to predict similarity between users: http://algo.qq.com/home/home/index.html
 
 ## Timeline
 **Apr 18th 12:00:00 - May 9th 11:59:59:** Preliminaries A. 30% of the test data in the preliminaries stage will be used for the scoring and ranking. This stage will last for 3 weeks.
