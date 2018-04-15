@@ -2,11 +2,16 @@
 
     .
     └── data                            # Toy Datasets
-        └── dog_breed                   # downloaded from https://www.kaggle.com/c/dog-breed-identification/data
-            ├── Train                   # (folder) unzipped from train.zip
-            ├── Test                    # (folder) unzipped from test.zip
-            ├── labels.csv              # unzipped from labels.csv.zip
-            └── sample_submission.csv   # unzipped from sample_submission.csv
+        ├── dog_breed                   # downloaded from https://www.kaggle.com/c/dog-breed-identification/data
+        │   ├── Test                    # (folder) unzipped from test.zip
+        |   ├── Train                   # (folder) unzipped from train.zip
+        |   ├── labels.csv              # unzipped from labels.csv.zip
+        |   └── sample_submission.csv   # unzipped from sample_submission.csv.zip
+        └── house_pricing               # downloaded from https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data
+            ├── data_description.txt    # directly downloaded
+            ├── sample_submission.csv   # directly downloaded or unzipped from sample_submission.csv.gz                 
+            ├── test.csv                # directly downloaded or unzipped from test.csv.gz
+            └── train.csv               # directly downloaded or unzipped from train.csv.gz
 
 ## TODO
 - [ ] Try TensorFlow
