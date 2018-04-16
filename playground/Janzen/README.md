@@ -26,6 +26,7 @@
 - [ ] Try stacking
 - [ ] Try ensemble with raw features involved (my idea)
 - [ ] Try cython
+- [ ] Try TSNE
 - [x] Add simple data visualization
 - [ ] Implement (or just copy from somewhere) Bayesian smoothing for CTR/CVR
 - [ ] Implement simple A/B test
