@@ -257,6 +257,7 @@ class SingleFeatureVisualizer:
         else:
             plt.bar(keys, counts, **kw)  # if ax is not given, plot in plt globally
             plt.title(title)
+            plt.show()
 
     @staticmethod
     def plot_categorical_feats(df, cat_cols=None, ncols=3, height_per_plot=6):
