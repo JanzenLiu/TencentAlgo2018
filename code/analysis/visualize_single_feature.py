@@ -1,8 +1,11 @@
 import numpy as np
 import pandas as pd
+import os
 import matplotlib.pyplot as plt
 from matplotlib.colors import Colormap  # for type annotation
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+figure_folder_path = os.path.join(current_dir, '..', 'figures')
 
 def get_cmap(n, name='hsv') -> Colormap:
     """Construct a `Colormap` instance that maps integer indices to distinct colors
@@ -53,7 +56,7 @@ class SingleFeatureVisualizer:
         self.dfs = dfs
 
     @staticmethod
-    def plot_numerical_feat(x, name, ax=None, bins=None, **kw):
+    def plot_numerical_feat(x, name, ax=None, bins=None, savepath=None, **kw):
         """Plot histogram for a single array representing a numerical feature
 
         Parameters
@@ -75,11 +78,14 @@ class SingleFeatureVisualizer:
             into. If array-like, it represents the bin edges to use to divide the
             numerical values.
 
+        savepath: string
+            A string containing a path to an output filename under the folder /code/figures.
+
         Examples
         --------
         >>> df = pd.read_csv('train.csv')
         >>> col = 'SalePrice'  # column to plot, which is supposed to be numerical
-        >>> SingleFeatureVisualizer.plot_numerical_feat(df[col], col)
+        >>> SingleFeatureVisualizer.plot_numerical_feat(df[col], col, savepath='test.png')
         """
         x_clean = x[~np.isnan(x)]  # filter out NaN values, which are supposed to be considered as well. To fix it
         nunique = len(np.unique(x_clean))
@@ -91,10 +97,11 @@ class SingleFeatureVisualizer:
         else:
             plt.hist(x_clean, bins=bins, **kw)  # if ax is not given, plot in plt globally
             plt.title(title)
-            plt.show()
+            if savepath is not None:
+                plt.savefig(os.path.join(figure_folder_path, savepath))
 
     @staticmethod
-    def plot_numerical_feats(df, num_cols=None, ncols=3, height_per_plot=6):
+    def plot_numerical_feats(df, num_cols=None, ncols=3, height_per_plot=6, savepath=None):
         """Plot histograms for specified or simply all numerical features in a DataFrame
 
         Parameters
@@ -112,10 +119,13 @@ class SingleFeatureVisualizer:
         height_per_plot: int
             Height of a subplot in the figure, default 6.
 
+        savepath: string
+            A string containing a path to an output filename under the folder /code/figures.
+
         Examples
         --------
         >>> df = pd.read_csv("train.csv")
-        >>> SingleFeatureVisualizer.plot_numerical_feats(df)
+        >>> SingleFeatureVisualizer.plot_numerical_feats(df, savepath='test.png')
         """
         # df_name = get_var_name(df)  # problem of get_var_name is not fixed so far, so just comment it
         # print(df_name)
@@ -132,8 +142,8 @@ class SingleFeatureVisualizer:
             SingleFeatureVisualizer.plot_numerical_feat(df[feat], feat, ax)
         for i in range(num_col_counts, nrows*ncols):
             fig.delaxes(axs.flatten()[i])  # delete unused subplots
-        plt.show()
-        print()
+        if savepath is not None:
+            plt.savefig(os.path.join(figure_folder_path, savepath))
 
     @staticmethod
     def plot_numerical_feats_double(dfs, num_cols=None, ncols=3, height_per_plot=6):
