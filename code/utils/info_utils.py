@@ -1,6 +1,7 @@
 import types
 
 
+# usage: `exec(glbs_string)`. Note that this line should be used in the caller module
 glbs_string = "" \
               "def globals_wrapper():\n" \
               " def f():\n" \
@@ -8,6 +9,8 @@ glbs_string = "" \
               " return f"
 
 
+# `globals_wrapper` will be replaced once you run `exec(glbs_string)`. I just declare this to mute IDE warning
+# so you can see how OCD I am :)
 def globals_wrapper():
     def f():
         return None
