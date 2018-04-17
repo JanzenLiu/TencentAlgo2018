@@ -29,7 +29,7 @@ class InfoUtils:
     Examples
     --------
     >>> # from info_utils import InfoUtils, glbs_string, globals_wrapper  # uncomment this during actual use
-    >>> exec(glbs_string)  # Python's globals sucks
+    >>> exec(glbs_string)  # This's the best way I figured out to fix globals problem. fxxk globals
     >>> iu = InfoUtils(globals_wrapper())
     """
     def __init__(self, glbs):
