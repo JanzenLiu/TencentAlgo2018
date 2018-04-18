@@ -17,7 +17,7 @@
 - [ ] Try TensorFlow
 - [ ] Try PyTorch
 - [ ] Try MXNet
-- [ ] Try FM
+- [x] Try FM
 - [ ] Try FFM
 - [ ] Try PNN (Polynominal Neural Networks)
 - [ ] Try matrix decomposition (MF, SVD/SVD++, etc.)
