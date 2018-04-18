@@ -4,9 +4,6 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib.colors import Colormap  # for type annotation
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-figure_folder_path = os.path.join(current_dir, '..', 'figures')
-
 def get_cmap(n, name='hsv') -> Colormap:
     """Construct a `Colormap` instance that maps integer indices to distinct colors
 
@@ -52,8 +49,29 @@ class SingleFeatureVisualizer:
     >>> df_test = pd.read_csv('test.csv')
     >>> sfv = SingleFeatureVisualizer({"train": df_train, "test":df_test})
     """
+    # class variable shared by all instances
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    output_dir = os.path.join(current_dir, '..', '..', 'figures')
+
     def __init__(self, dfs):
         self.dfs = dfs
+
+    @staticmethod
+    def get_output_path(savepath):
+        """Helper function to construct a path to an output filename under the folder /figures.
+
+        Parameters
+        ----------
+        savepath: string
+            Original savepath that you want to convert.
+
+        Examples
+        --------
+        >>> savepath = SingleFeatureVisualizer.get_output_path(savepath)
+        """
+        if savepath is not None:
+            savepath = os.path.join(SingleFeatureVisualizer.output_dir, savepath)
+        return savepath
 
     @staticmethod
     def plot_numerical_feat(x, name, ax=None, bins=None, savepath=None, **kw):
@@ -79,7 +97,7 @@ class SingleFeatureVisualizer:
             numerical values.
 
         savepath: string
-            A string containing a path to an output filename under the folder /code/figures.
+            A string containing a path to an output filename
 
         Examples
         --------
@@ -98,7 +116,7 @@ class SingleFeatureVisualizer:
             plt.hist(x_clean, bins=bins, **kw)  # if ax is not given, plot in plt globally
             plt.title(title)
             if savepath is not None:
-                plt.savefig(os.path.join(figure_folder_path, savepath))
+                plt.savefig(savepath)
 
     @staticmethod
     def plot_numerical_feats(df, num_cols=None, ncols=3, height_per_plot=6, savepath=None):
@@ -120,7 +138,7 @@ class SingleFeatureVisualizer:
             Height of a subplot in the figure, default 6.
 
         savepath: string
-            A string containing a path to an output filename under the folder /code/figures.
+            A string containing a path to an output filename.
 
         Examples
         --------
@@ -143,10 +161,10 @@ class SingleFeatureVisualizer:
         for i in range(num_col_counts, nrows*ncols):
             fig.delaxes(axs.flatten()[i])  # delete unused subplots
         if savepath is not None:
-            plt.savefig(os.path.join(figure_folder_path, savepath))
+            plt.savefig(savepath)
 
     @staticmethod
-    def plot_numerical_feats_double(dfs, num_cols=None, ncols=3, height_per_plot=6):
+    def plot_numerical_feats_double(dfs, num_cols=None, ncols=3, height_per_plot=6, savepath=None):
         """Plot histograms for specified or simply all numerical features in two given DataFrames
 
         Parameters
@@ -165,12 +183,15 @@ class SingleFeatureVisualizer:
         height_per_plot: int
             Height of a subplot in the figure, default 6.
 
+        savepath: string
+            A string containing a path to an output filename.
+
         Examples
         --------
         >>> df_train = pd.read_csv('train.csv')
         >>> df_test = pd.read_csv('test.csv')
         >>> dfs = [('train', df_train), ('test', df_test)]  # two elements indicating two DataFrames and their names
-        >>> SingleFeatureVisualizer.plot_numerical_feats_double(dfs)
+        >>> SingleFeatureVisualizer.plot_numerical_feats_double(dfs, savepath='test.png')
         """
         df1_name, df1 = dfs[0]
         df2_name, df2 = dfs[1]
@@ -203,11 +224,11 @@ class SingleFeatureVisualizer:
             ax.legend([df1_name, df2_name])
         for i in range(num_col_counts, nrows*ncols):
             fig.delaxes(axs.flatten()[i])
-        plt.show()
-        print()
+        if savepath is not None:
+            plt.savefig(savepath)
 
     @staticmethod
-    def plot_categorical_feat(x, name, ax=None, keys=None, density=True, plot_nan=True, shift=None, **kw):
+    def plot_categorical_feat(x, name, ax=None, keys=None, density=True, plot_nan=True, shift=None, savepath=None, **kw):
         """Plot barplot for a single array representing a categorical feature
 
         Parameters
@@ -240,11 +261,14 @@ class SingleFeatureVisualizer:
             Horizontal shift of bars to their default positions. This should be set within
             the range [0, 1).
 
+        savepath: string
+            A string containing a path to an output filename.
+
         Examples
         --------
         >>> df = pd.read_csv('train.csv')
         >>> col = 'MSSubClass'  # column to plot, which is supposed to be categorical
-        >>> SingleFeatureVisualizer.plot_categorical_feat(df[col], col)
+        >>> SingleFeatureVisualizer.plot_categorical_feat(df[col], col, savepath='test.png')
         """
         nan_idx = pd.isnull(pd.Series(x))
         x_clean = x[~nan_idx]  # filter out NaN values
@@ -267,10 +291,11 @@ class SingleFeatureVisualizer:
         else:
             plt.bar(keys, counts, **kw)  # if ax is not given, plot in plt globally
             plt.title(title)
-            plt.show()
+            if savepath is not None:
+                plt.savefig(savepath)
 
     @staticmethod
-    def plot_categorical_feats(df, cat_cols=None, ncols=3, height_per_plot=6):
+    def plot_categorical_feats(df, cat_cols=None, ncols=3, height_per_plot=6, savepath=None):
         """Plot barplots for specified or simply all categorical features in a DataFrame
 
         Parameters
@@ -288,10 +313,13 @@ class SingleFeatureVisualizer:
         height_per_plot: int
             Height of a subplot in the figure, default 6.
 
+        savepath: string
+            A string containing a path to an output filename.
+
         Examples
         --------
         >>> df = pd.read_csv("train.csv")
-        >>> SingleFeatureVisualizer.plot_categorical_feats(df)
+        >>> SingleFeatureVisualizer.plot_categorical_feats(df, savepath='test.png')
         """
         # df_name = get_var_name(df)  # problem of get_var_name is not fixed so far, so just comment it
         # print(df_name)
@@ -307,11 +335,11 @@ class SingleFeatureVisualizer:
             SingleFeatureVisualizer.plot_categorical_feat(df[feat], feat, axs[ix][iy])
         for i in range(num_col_counts, nrows * ncols):
             fig.delaxes(axs.flatten()[i])
-        plt.show()
-        print()
+        if savepath is not None:
+            plt.savefig(savepath)
 
     @staticmethod
-    def plot_categorical_feats_double(dfs, cat_cols=None, ncols=3, height_per_plot=6):
+    def plot_categorical_feats_double(dfs, cat_cols=None, ncols=3, height_per_plot=6, savepath=None):
         """Plot barplots for specified or simply all categorical features in two given DataFrames
 
         Parameters
@@ -330,12 +358,15 @@ class SingleFeatureVisualizer:
         height_per_plot: int
             Height of a subplot in the figure, default 6.
 
+        savepath: string
+            A string containing a path to an output filename.
+
         Examples
         --------
         >>> df_train = pd.read_csv('train.csv')
         >>> df_test = pd.read_csv('test.csv')
         >>> dfs = [('train', df_train), ('test', df_test)]  # two elements indicating two DataFrames and their names
-        >>> SingleFeatureVisualizer.plot_categorical_feats_double(dfs)
+        >>> SingleFeatureVisualizer.plot_categorical_feats_double(dfs, savepath='test.png')
         """
         df1_name, df1 = dfs[0]
         df2_name, df2 = dfs[1]
@@ -373,10 +404,10 @@ class SingleFeatureVisualizer:
             ax.legend([df1_name, df2_name])
         for i in range(num_col_counts, nrows * ncols):
             fig.delaxes(axs.flatten()[i])
-        plt.show()
-        print()
+        if savepath is not None:
+            plt.savefig(savepath)
 
-    def num_hist(self, df_name, col_name, ax=None, bins=None, **kw):
+    def num_hist(self, df_name, col_name, ax=None, bins=None, savepath=None, **kw):
         """Plot histogram for a single array representing a numerical feature
 
         Parameters
@@ -400,6 +431,9 @@ class SingleFeatureVisualizer:
             into. If array-like, it represents the bin edges to use to divide the
             numerical values.
 
+        savepath: string
+            A string containing a path to an output filename under the folder /figures.
+
         Examples
         --------
         >>> df = pd.read_csv('train.csv')
@@ -410,9 +444,10 @@ class SingleFeatureVisualizer:
         df_name = list(self.dfs.keys())[0] if df_name is None else df_name
         df = self.dfs[df_name]
         x = df[col_name]
-        SingleFeatureVisualizer.plot_numerical_feat(x, col_name, ax, bins, **kw)
+        savepath = SingleFeatureVisualizer.get_output_path(savepath)
+        SingleFeatureVisualizer.plot_numerical_feat(x, col_name, ax, bins, savepath, **kw)
 
-    def num_hists(self, df_name, num_cols=None, ncols=3, height_per_plot=6):
+    def num_hists(self, df_name, num_cols=None, ncols=3, height_per_plot=6, savepath=None):
         """Plot histograms for specified or simply all numerical features in a DataFrame
 
         Parameters
@@ -431,6 +466,9 @@ class SingleFeatureVisualizer:
         height_per_plot: int
             Height of a subplot in the figure, default 6.
 
+        savepath: string
+            A string containing a path to an output filename under the folder /figures.
+
         Examples
         --------
         >>> df = pd.read_csv('train.csv')
@@ -438,9 +476,10 @@ class SingleFeatureVisualizer:
         >>> sfv.num_hists("train")
         """
         df = self.dfs[df_name]
-        SingleFeatureVisualizer.plot_numerical_feats(df, num_cols, ncols, height_per_plot)
+        savepath = SingleFeatureVisualizer.get_output_path(savepath)
+        SingleFeatureVisualizer.plot_numerical_feats(df, num_cols, ncols, height_per_plot, savepath)
 
-    def num_hists_double(self, df_names, num_cols=None, ncols=3, height_per_plot=6):
+    def num_hists_double(self, df_names, num_cols=None, ncols=3, height_per_plot=6, savepath=None):
         """Plot histograms for specified or simply all numerical features in two given DataFrames
 
         Parameters
@@ -459,6 +498,9 @@ class SingleFeatureVisualizer:
         height_per_plot: int
             Height of a subplot in the figure, default 6.
 
+        savepath: string
+            A string containing a path to an output filename under the folder /figures.
+
         Examples
         --------
         >>> df_train = pd.read_csv('train.csv')
@@ -467,9 +509,10 @@ class SingleFeatureVisualizer:
         >>> sfv.num_hists_double(["train", "test"])
         """
         dfs = [(df_name, self.dfs[df_name]) for df_name in df_names]
-        SingleFeatureVisualizer.plot_numerical_feats_double(dfs, num_cols, ncols, height_per_plot)
+        savepath = SingleFeatureVisualizer.get_output_path(savepath)
+        SingleFeatureVisualizer.plot_numerical_feats_double(dfs, num_cols, ncols, height_per_plot, savepath)
 
-    def cat_bar(self, df_name, col_name, ax=None, keys=None, density=True, plot_nan=True, shift=None, **kw):
+    def cat_bar(self, df_name, col_name, ax=None, keys=None, density=True, plot_nan=True, shift=None, savepath=None, **kw):
         """Plot histogram for a single array representing a numerical feature
 
         Parameters
@@ -504,6 +547,9 @@ class SingleFeatureVisualizer:
             Horizontal shift of bars to their default positions. This should be set within
             the range [0, 1).
 
+        savepath: string
+            A string containing a path to an output filename under the folder /figures.
+
         Examples
         --------
         >>> df = pd.read_csv('train.csv')
@@ -514,9 +560,10 @@ class SingleFeatureVisualizer:
         df_name = list(self.dfs.keys())[0] if df_name is None else df_name
         df = self.dfs[df_name]
         x = df[col_name]
-        SingleFeatureVisualizer.plot_categorical_feat(x, col_name, ax, keys, density, plot_nan, shift, **kw)
+        savepath = SingleFeatureVisualizer.get_output_path(savepath)
+        SingleFeatureVisualizer.plot_categorical_feat(x, col_name, ax, keys, density, plot_nan, shift, savepath, **kw)
 
-    def cat_bars(self, df_name, cat_cols=None, ncols=3, height_per_plot=6):
+    def cat_bars(self, df_name, cat_cols=None, ncols=3, height_per_plot=6, savepath=None):
         """Plot histograms for specified or simply all numerical features in a DataFrame
 
         Parameters
@@ -535,6 +582,9 @@ class SingleFeatureVisualizer:
         height_per_plot: int
             Height of a subplot in the figure, default 6.
 
+        savepath: string
+            A string containing a path to an output filename under the folder /figures.
+
         Examples
         --------
         >>> df = pd.read_csv('train.csv')
@@ -542,9 +592,10 @@ class SingleFeatureVisualizer:
         >>> sfv.cat_bars("train")
         """
         df = self.dfs[df_name]
-        SingleFeatureVisualizer.plot_categorical_feats(df, cat_cols, ncols, height_per_plot)
+        savepath = SingleFeatureVisualizer.get_output_path(savepath)
+        SingleFeatureVisualizer.plot_categorical_feats(df, cat_cols, ncols, height_per_plot, savepath)
 
-    def cat_bars_double(self, df_names, cat_cols=None, ncols=3, height_per_plot=6):
+    def cat_bars_double(self, df_names, cat_cols=None, ncols=3, height_per_plot=6, savepath=None):
         """Plot histograms for specified or simply all numerical features in two given DataFrames
 
         Parameters
@@ -563,6 +614,9 @@ class SingleFeatureVisualizer:
         height_per_plot: int
             Height of a subplot in the figure, default 6.
 
+        savepath: string
+            A string containing a path to an output filename under the folder /figures.
+
         Examples
         --------
         >>> df_train = pd.read_csv('train.csv')
@@ -571,4 +625,5 @@ class SingleFeatureVisualizer:
         >>> sfv.cat_bars_double(["train", "test"])
         """
         dfs = [(df_name, self.dfs[df_name]) for df_name in df_names]
-        SingleFeatureVisualizer.plot_categorical_feats_double(dfs, cat_cols, ncols, height_per_plot)
+        savepath = SingleFeatureVisualizer.get_output_path(savepath)
+        SingleFeatureVisualizer.plot_categorical_feats_double(dfs, cat_cols, ncols, height_per_plot, savepath)
