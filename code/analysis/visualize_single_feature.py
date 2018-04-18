@@ -170,7 +170,7 @@ class SingleFeatureVisualizer:
         if num_cols is None:
             num_cols1 = df1.dtypes[df1.dtypes != object].index.tolist()
             num_cols2 = df2.dtypes[df2.dtypes != object].index.tolist()
-            num_cols = num_cols1 and num_cols2
+            num_cols = list(set(num_cols1).union(set(num_cols2)))
         num_col_counts = len(num_cols)
         nrows = int(np.ceil(num_col_counts / 3))
         fig, axs = plt.subplots(nrows, ncols, figsize=(20, nrows*height_per_plot))
@@ -287,14 +287,15 @@ class SingleFeatureVisualizer:
         # print(df_name)
         # print("-" * len(df_name))
         if cat_cols is None:
-            cat_cols = df.dtypes[df.dtypes == object].index.tolist()
+            cat_cols = df.dtypes[df.dtypes.isin(["object", "category"])].index.tolist()
         num_col_counts = len(cat_cols)
         nrows = int(np.ceil(num_col_counts / 3))
         fig, axs = plt.subplots(nrows, ncols, figsize=(20, nrows * height_per_plot))
         for i, feat in enumerate(cat_cols):
             ix = i // ncols
             iy = i % ncols
-            SingleFeatureVisualizer.plot_categorical_feat(df[feat], feat, axs[ix][iy])
+            ax = axs[ix][iy] if nrows > 1 else axs[iy]
+            SingleFeatureVisualizer.plot_categorical_feat(df[feat], feat, ax)
         for i in range(num_col_counts, nrows * ncols):
             fig.delaxes(axs.flatten()[i])
         plt.show()
@@ -333,9 +334,9 @@ class SingleFeatureVisualizer:
         print(df_names)
         print("-" * len(df_names))
         if cat_cols is None:
-            cat_cols1 = df1.dtypes[df1.dtypes == object].index.tolist()
-            cat_cols2 = df2.dtypes[df2.dtypes == object].index.tolist()
-            cat_cols = cat_cols1 and cat_cols2
+            cat_cols1 = df1.dtypes[df1.dtypes.isin(["object", "category"])].index.tolist()
+            cat_cols2 = df2.dtypes[df2.dtypes.isin(["object", "category"])].index.tolist()
+            cat_cols = list(set(cat_cols1).union(set(cat_cols2)))
         num_col_counts = len(cat_cols)
         nrows = int(np.ceil(num_col_counts / 3))
         fig, axs = plt.subplots(nrows, ncols, figsize=(20, nrows * height_per_plot))
