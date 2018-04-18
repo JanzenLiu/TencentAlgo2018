@@ -24,12 +24,12 @@ A machine learning competition held by Tencent Social Ads to predict similarity 
     │   └── utils                           # Common tool and utility scripts
     ├── data                                # Data files
     │   └── raw                             # Raw data files downloaded from the competition
-    │       └── preliminary_contest_data    # Data files for preliminary stage. You know where to download
+    │       └── preliminary_contest_data    # Data files for preliminary stage. You know where to download
     │           ├── adFeature.csv           # You know what it is. Just make sure the location is consistent
     │           ├── test1.csv               # Same as above
     │           ├── train.csv               # Same as above
     │           └── userFeature.data        # Same as above
-    ├── docs                                # Documentation files
+    ├── docs                                # Documentation files
     ├── external                            # External utility files (e.g. external libraries, pretrained models and embeddings etc.)
     ├── figure                              # Figure files
     ├── log                                 # Log files
