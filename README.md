@@ -15,22 +15,27 @@ A machine learning competition held by Tencent Social Ads to predict similarity 
 ## Project Structure
 
     .
-    ├── code                    # Source files
-    │   ├── analysis            # Analysis and visualization scripts
-    │   ├── feature             # Feature engineering scripts
-    │   ├── model               # Model scripts
-    │   ├── pipeline            # Pipeline scripts to run the whole (or partial) process
-    │   ├── preprocess          # Preprocessing scripts
-    │   └── utils               # Common tool and utility scripts
-    ├── data                    # Data files
-    │   └── raw                 # Raw data files downloaded from the competition
-    ├── docs                    # Documentation files
-    ├── external                # External utility files (e.g. external libraries, pretrained models and embeddings etc.)
-    ├── figure                  # Figure files
-    ├── log                     # Log files
-    ├── playground              # Playground for members to place personal files (e.g. notebooks, scripts, outputs etc.)
-    │   ├── Elvin               # Elvin's personal files (you can rename it as you like)
-    │   ├── Janzen              # Janzen's personal files
-    │   └── Lily                # Lily's personal files (you can rename it as you like)
-    ├── test                    # Automated tests
+    ├── code                                # Source files
+    │   ├── analysis                        # Analysis and visualization scripts
+    │   ├── feature                         # Feature engineering scripts
+    │   ├── model                           # Model scripts
+    │   ├── pipeline                        # Pipeline scripts to run the whole (or partial) process
+    │   ├── preprocess                      # Preprocessing scripts
+    │   └── utils                           # Common tool and utility scripts
+    ├── data                                # Data files
+    │   └── raw                             # Raw data files downloaded from the competition
+    │       └── preliminary_contest_data    # Data files for preliminary stage. You know where to download
+    │           ├── adFeature.csv           # You know what it is. Just make sure the location is consistent
+    │           ├── test1.csv               # Same as above
+    │           ├── train.csv               # Same as above
+    │           └── userFeature.data        # Same as above
+    ├── docs                                # Documentation files
+    ├── external                            # External utility files (e.g. external libraries, pretrained models and embeddings etc.)
+    ├── figure                              # Figure files
+    ├── log                                 # Log files
+    ├── playground                          # Playground for members to place personal files (e.g. notebooks, scripts, outputs etc.)
+    │   ├── Elvin                           # Elvin's personal files (you can rename it as you like)
+    │   ├── Janzen                          # Janzen's personal files
+    │   └── Lily                            # Lily's personal files (you can rename it as you like)
+    ├── test                                # Automated tests
     └── README.md
