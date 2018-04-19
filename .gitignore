@@ -14,4 +14,5 @@
 # Personal stuff
 playground/Janzen/data/*
 playground/Janzen/output/*
+playground/Janzen/**/*_original.ipynb
 
