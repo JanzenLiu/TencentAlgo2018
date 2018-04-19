@@ -17,14 +17,17 @@
 - [ ] Try TensorFlow
 - [ ] Try PyTorch
 - [ ] Try MXNet
-- [ ] Try FM
+- [x] Try FM
 - [ ] Try FFM
 - [ ] Try PNN (Polynominal Neural Networks)
-- [ ] Try matrix decomposition (MF, SVD/SVD++, etc.)
+- [ ] Try matrix decomposition (MF, SVD/SVD++, SVD for RecSys etc.)
 - [ ] Try sklearn FeatureUnion and Pipeline
 - [ ] Try tuning hyperparameters with hyperopt
 - [ ] Try stacking
 - [ ] Try ensemble with raw features involved (my idea)
+- [ ] Try synthetic oversampling
+- [ ] Try cost-sensitive learning for imbalanced data (not only with imbalenced labels, but also features)
+- [ ] Try ensembling for imbalanced data
 - [ ] Try cython
 - [ ] Try TSNE
 - [x] Add simple data visualization
