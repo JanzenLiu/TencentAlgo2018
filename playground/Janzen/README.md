@@ -1,7 +1,10 @@
 ## Data Source
 
     .
-    └── data                            # Toy Datasets
+    ├──bin
+    │   ├── ffm-train                   # executable to train an FFM model, see https://github.com/guestwalk/libffm to build it
+    │   └── ffm-predict                 # executable to make prediction with a trained FFM model, same as above
+    └── data                            # Toy Datasets
         ├── dog_breed                   # downloaded from https://www.kaggle.com/c/dog-breed-identification/data
         │   ├── Test                    # (folder) unzipped from test.zip
         |   ├── Train                   # (folder) unzipped from train.zip
@@ -18,7 +21,7 @@
 - [ ] Try PyTorch
 - [ ] Try MXNet
 - [x] Try FM
-- [ ] Try FFM
+- [x] Try FFM
 - [ ] Try PNN (Polynominal Neural Networks)
 - [ ] Try matrix decomposition (MF, SVD/SVD++, SVD for RecSys etc.)
 - [ ] Try sklearn FeatureUnion and Pipeline
