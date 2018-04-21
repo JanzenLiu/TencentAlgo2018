@@ -12,6 +12,9 @@
 **/data/*
 
 # Personal stuff
+playground/Janzen/bin/*
 playground/Janzen/data/*
+playground/Janzen/model/*
 playground/Janzen/output/*
-
+playground/Janzen/**/*_original.ipynb
+playground/Janzen/**/*.dffm.bin
