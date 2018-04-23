@@ -3,8 +3,14 @@ import pickle
 import os
 
 
+# path corrector
 def _correct_path(path):
     return os.path.join(BASE_DIR, path)
+
+
+def user_feature_path(feat_name):
+    filename = "userFeature.[featureName='{}'].data".format(feat_name)
+    return os.path.join(PRELIMINARY_USER_FEATURE_DIR, filename)
 
 
 # paths as constants
@@ -12,6 +18,7 @@ BASE_PATH = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(BASE_PATH)
 PRELIMINARY_RAW_DATA_DIR = _correct_path('../../data/raw/preliminary_contest_data/')
 PRELIMINARY_AD_CNT_DIR = _correct_path('../../data/nlp_count/preliminary_contest_data/byAdFeatureName/')
+PRELIMINARY_USER_FEATURE_DIR = _correct_path('../../data/split/preliminary_contest_data/byUserFeatureName/')
 PRELIMINARY_USER_CNT_DIR = _correct_path('../../data/nlp_count/preliminary_contest_data/byUserFeatureName/')
 PRELIMINARY_USER_TFIDF_DIR = _correct_path('../../data/nlp_tfidf/preliminary_contest_data/byUserFeatureName/')
 PRELIMINARY_RAW_FILE_DICT = {
@@ -30,12 +37,12 @@ def load_pickle(filepath):
 # =======================
 # Preliminary Data Loader
 # =======================
-def load_raw_data_preliminary(name, **kw):
+def load_preliminary_raw_data(name, **kw):
     filename = PRELIMINARY_RAW_FILE_DICT[name]
     return pd.read_csv(os.path.join(PRELIMINARY_RAW_DATA_DIR, filename), **kw)
 
 
-def load_ad_cnt_preliminary(feat_name):
+def load_preliminary_ad_cnt(feat_name):
     filename = "adFeature.[featureName='{}'].pkl".format(feat_name)
     filepath = os.path.join(PRELIMINARY_AD_CNT_DIR, filename)
     index, matrix = load_pickle(filepath)
@@ -47,7 +54,7 @@ def load_ad_cnt_preliminary(feat_name):
     return uid, (index, matrix)
 
 
-def load_user_cnt_preliminary(feat_name):
+def load_preliminary_user_cnt(feat_name):
     filename = "userFeature.[featureName='{}'].pkl".format(feat_name)
     filepath = os.path.join(PRELIMINARY_USER_CNT_DIR, filename)
     index, matrix = load_pickle(filepath)
@@ -59,7 +66,7 @@ def load_user_cnt_preliminary(feat_name):
     return uid, (index, matrix)
 
 
-def load_user_tfidf_preliminary(feat_name):
+def load_preliminary_user_tfidf(feat_name):
     filename = "userFeature.[featureName='{}'].pkl".format(feat_name)
     filepath = os.path.join(PRELIMINARY_USER_TFIDF_DIR, filename)
     index, idf, matrix = load_pickle(filepath)
@@ -69,6 +76,13 @@ def load_user_tfidf_preliminary(feat_name):
     uid = load_pickle(filepath)
 
     return uid, (index, idf, matrix)
+
+
+def load_preliminary_user_feature(feat_name, **kw):
+    sep = kw.pop('sep', '|')
+    dtype = kw.pop('dtype', {feat_name: str})
+    filepath = user_feature_path(feat_name)
+    return pd.read_csv(filepath, sep=sep, dtype=dtype, **kw)
 
 
 # =======================
@@ -82,27 +96,34 @@ def load_user_tfidf_preliminary(feat_name):
 # ==========================================
 def load_raw_data(name, stage="preliminary", **kw):
     if stage == "preliminary":
-        return load_raw_data_preliminary(name, **kw)
+        return load_preliminary_raw_data(name, **kw)
     else:
         return None
 
 
 def load_ad_cnt(feat_name, stage="preliminary"):
     if stage == "preliminary":
-        return load_ad_cnt_preliminary(feat_name)
+        return load_preliminary_ad_cnt(feat_name)
     else:
         return None
 
 
 def load_user_cnt(feat_name, stage="preliminary"):
     if stage == "preliminary":
-        return load_user_cnt_preliminary(feat_name)
+        return load_preliminary_user_cnt(feat_name)
     else:
         return None
 
 
 def load_user_tfidf(feat_name, stage="preliminary"):
     if stage == "preliminary":
-        return load_user_tfidf_preliminary(feat_name)
+        return load_preliminary_user_tfidf(feat_name)
+    else:
+        return None
+
+
+def load_user_feature(feat_name, stage="preliminary"):
+    if stage == "preliminary":
+        return load_preliminary_user_feature(feat_name)
     else:
         return None
