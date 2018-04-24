@@ -39,3 +39,8 @@ A machine learning competition held by Tencent Social Ads to predict similarity 
     │   └── Lily                            # Lily's personal files (you can rename it as you like)
     ├── test                                # Automated tests
     └── README.md
+
+## Reference
+[\[Github\] 2018腾讯广告大赛baseline 100行代码带你上0.73](https://github.com/YouChouNoBB/2018-tencent-ad-competition-baseline) by YouChouNoBB
+
+[\[Github\] 腾讯社交广告算法大赛 Baseline](https://github.com/loyalzc/tencent_ad) by loyalzc
