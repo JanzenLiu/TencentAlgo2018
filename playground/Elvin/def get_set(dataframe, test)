@@ -1,0 +1,52 @@
+def get_set(dataframe, test)
+    aid, (afeat_index, avec) = load_ad_cnt('aid')
+    eid, (efeat_index, evec) = load_user_cnt("education")
+    i1id, (i1feat_index, i1vec) = load_user_cnt("interest1")
+    i2id, (i2feat_index, i2vec) = load_user_cnt("interest2")
+    i3id, (i3feat_index, i3vec) = load_user_cnt("interest3")
+    i4id, (i4feat_index, i4vec) = load_user_cnt("interest4")
+    i5id, (i5feat_index, i5vec) = load_user_cnt("interest5")
+    k1id, (k1feat_index, k1vec) = load_user_cnt("kw1")
+    k2id, (k2feat_index, k2vec) = load_user_cnt("kw2")
+    k3id, (k3feat_index, k3vec) = load_user_cnt("kw3")
+    appid, (appfeat_index, appvec) =load_user_cnt("appIdAction")
+    apiid, (apifeat_index, apivec) = load_user_cnt("appIdInstall")
+
+    aid_to_index = dict(zip(aid, list(range(len(aid)))))  # mapping from aids to distinct indices
+    eid_to_index = dict(zip(eid, list(range(len(eid)))))
+    i1id_to_index = dict(zip(i1id, list(range(len(i1id)))))  # mapping from uids to distinct indices
+    i2id_to_index = dict(zip(i2id, list(range(len(i2id)))))
+    i3id_to_index = dict(zip(i3id, list(range(len(i3id)))))
+    i4id_to_index = dict(zip(i4id, list(range(len(i4id)))))
+    i5id_to_index = dict(zip(i5id, list(range(len(i5id)))))
+    k1id_to_index = dict(zip(k1id, list(range(len(k1id)))))
+    k2id_to_index = dict(zip(k2id, list(range(len(k2id)))))
+    k3id_to_index = dict(zip(k3id, list(range(len(k3id)))))
+    appid_to_index = dict(zip(appid, list(range(len(appid)))))
+    apiid_to_index = dict(zip(apiid, list(range(len(apiid)))))
+
+    a_index = df_train['aid'].map(aid_to_index).values  # list of indices for matrix joining
+    e_index = df_train['uid'].map(eid_to_index).values
+    i1_index = df_train['uid'].map(i1id_to_index).values  # list of indices for matrix joining
+    i2_index = df_train['uid'].map(i2id_to_index).values
+    i3_index = df_train['uid'].map(i3id_to_index).values
+    i4_index = df_train['uid'].map(i4id_to_index).values
+    i5_index = df_train['uid'].map(i5id_to_index).values
+    k1_index = df_train['uid'].map(k1id_to_index).values
+    k2_index = df_train['uid'].map(k2id_to_index).values
+    k3_index = df_train['uid'].map(k3id_to_index).values
+    app_index = df_train['uid'].map(appid_to_index).values
+    api_index = df_train['uid'].map(apiid_to_index).values
+
+    del aid_to_index, eid_to_index, i1id_to_index, i2id_to_index, i3id_to_index, i4id_to_index, i5id_to_index, k1id_to_index
+    del k2id_to_index, k3id_to_index, appid_to_index, apiid_to_index
+
+    X = hstack((avec[a_index,:], evec[e_index,:], i1vec[i1_index, :], i2vec[i2_index, :], i3vec[i3_index, :],
+               i4vec[i4_index, :], i5vec[i5_index, :], k1vec[k1_index, :], k2vec[k2_index, :], k3vec[k3_index, :], 
+               appvec[app_index, :], apivec[api_index, :])).tocsr()  # joined user and advertise matrix
+    if test = True:
+        return X
+    else:
+        y = (df_train['label'].values + 1) / 2
+    
+    return X,y
