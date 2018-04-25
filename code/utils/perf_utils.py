@@ -1,5 +1,7 @@
 import psutil
+import time
 import os
+from contextlib import contextmanager
 
 
 def format_secs(secs, decimal=1) -> str:
@@ -121,3 +123,32 @@ def get_memory_bytes() -> int:
 def get_memory_str() -> str:
     """Get formatted literal string for the memory usage of the current process."""
     return format_memory(get_memory_bytes())
+
+
+def get_time_str(verbose_level="hour"):
+    if verbose_level == "hour":
+        return time.strftime("%H:%M:%S", time.gmtime())
+    elif verbose_level == "day":
+        return time.strftime("%b %d %H:%M:%S", time.gmtime())
+    else:
+        return None  # use raise ValueError instead later
+
+
+@contextmanager
+def profiler(task_name, moment_level="hour", verbose_memory=True, verbose_duration=True):
+    t0 = time.time()
+    m0 = get_memory_bytes()
+    yield
+    t_delta = time.time() - t0
+    m_delta = get_memory_bytes() - m0
+
+    msg = ""
+    if moment_level is not None:
+        msg += "[{}] ".format(get_time_str(moment_level))
+
+    msg += "Finish {}.".format(task_name)
+    if verbose_memory:
+        msg += " △M: {}.".format(format_memory_diff(m_delta))
+    if verbose_duration:
+        msg += " △T: {}.".format(format_secs(t_delta))
+    print(msg)
