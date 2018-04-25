@@ -1,0 +1,38 @@
+def get_set(dataframe, test, features_u_want):
+    
+    aid, (afeat_index, avec) = load_ad_cnt('aid')
+    aid_to_index = dict(zip(aid, list(range(len(aid)))))  # mapping from aids to distinct indices
+    a_index = dataframe['aid'].map(aid_to_index).values  # list of indices for matrix joining
+    
+    id_index_evec = []                        
+    for each in features_u_want:
+        id_index_evec.append(load_user_cnt(each))           #eid, (efeat_index, evec) = load_user_cnt("education")
+        
+    id2index = []                                        # mapping from uids to distinct indices
+    for each in id_index_evec:
+        to_index.append(dict(zip(each[0], list(range(len(each[0]))))))  # eid_to_index = dict(zip(eid, list(range(len(eid)))))
+    
+    # list of indices for matrix joining
+    
+    index_mapper = []
+    for each in id2index:
+        index_mapper.append(dataframe['uid'].map(each).values)     # e_index = dataframe['uid'].map(eid_to_index).values
+    
+    X = hstack()
+    
+    X = hstack((avec[a_index,:], evec[e_index,:], i1vec[i1_index, :], i2vec[i2_index, :], i3vec[i3_index, :],
+               i4vec[i4_index, :], i5vec[i5_index, :], k1vec[k1_index, :], k2vec[k2_index, :], k3vec[k3_index, :], 
+               appvec[app_index, :], apivec[api_index, :])).tocsr()  # joined user and advertise matrix
+    if test==True:
+        return X
+    else:
+        y = (dataframe['label'].values + 1) / 2
+    
+    return X, y
+
+
+{'age': 0.5040452316850349, 'gender': 0.49740594857039261, 'marriageStatus': 0.51294574343476496, 'LBS': 0.50580830957091605, 'house': 0.50169161605799872, 'topic1': 0.5074232585117272, 'topic2': 0.55421805480170372, 'topic3': 0.50100457685179833}
+
+{'education': 0.5422597126375176, 'interest1': 0.55329627333608877, 'interest2': 0.63019419727034587, 'interest3': 0.50297578149732236, 'interest4': 0.50219325741571008, 'interest5': 0.57537855778294733, 'kw1': 0.54828987665311124, 'kw2': 0.66582642625406341, 'kw3': 0.50253261774995084, 'appIdAction': 0.5019211794874765, 'appIdInstall': 0.5016676765078375}
+
+
