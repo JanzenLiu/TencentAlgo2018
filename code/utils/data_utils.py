@@ -28,11 +28,18 @@ PRELIMINARY_RAW_FILE_DICT = {
  }
 
 
+# ==============
+# Pickle Handler
+# ==============
 def load_pickle(filepath):
     with open(filepath, "rb") as f:
         obj = pickle.load(f)
     return obj
 
+
+def save_pickle(obj, filepath):
+    with open(filepath, "wb") as f:
+        pickle.dump(obj, f)
 
 # =======================
 # Preliminary Data Loader
