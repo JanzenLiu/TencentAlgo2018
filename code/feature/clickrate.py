@@ -66,7 +66,7 @@ class BayesianSmoothedClickrate:
         return alpha, beta
 
     @staticmethod
-    def iter_solve(imps, clks, alpha=1, beta=1, max_iter=1000, epsilon=1e-10):
+    def iter_solve(imps, clks, alpha=1, beta=1, max_iter=1000, epsilon=1e-10, verbose=True):
         """Solve alpha and beta with repeated fixed-point iterations.
 
         I strongly recommend a larger max_iter, like 10000, in this
@@ -96,13 +96,18 @@ class BayesianSmoothedClickrate:
             Epsilon in the fixed-point iterations. It specifies the threshold
             of change in alpha and beta. The iterations will stop if both the change
             in alpha and beta is smaller than this value.
+
+        verbose: boolean
+            Whether to disable the progress bar of tqdm. You know some time when
+            you are fitting thousands of bayesian model, too many progress bar output
+            can be annoying.
         """
         imps = np.array(imps)
         clks = np.array(clks)
         mask = (imps > 0)
         imps = imps[mask]
         clks = clks[mask]
-        for i in tqdm(range(max_iter)):
+        for i in tqdm(range(max_iter), disable=(not verbose)):
             new_alpha, new_beta = BayesianSmoothedClickrate.fixed_point_iteration(imps, clks,
                                                                                   alpha, beta)
             if abs(new_alpha - alpha) < epsilon and abs(new_beta - beta) < epsilon:
@@ -160,10 +165,14 @@ class BayesianSmoothedClickrate:
         denominators = imps + alpha + beta
         return numerators / denominators
 
+    @property
+    def clickrate_expectation(self):
+        return self.alpha / (self.alpha + self.beta)
+
     def sample(self, imps):
         return BayesianSmoothedClickrate.static_sample(self.alpha, self.beta, imps)
 
-    def fit(self, imps, clks):
+    def fit(self, imps, clks, verbose=True):
         """Fit the instance's alpha and beta with given impressions and clicks data.
 
         Arguments
@@ -173,6 +182,11 @@ class BayesianSmoothedClickrate:
 
         clks: array-like
             Array-like containing click counts for each case.
+
+        verbose: boolean
+            Whether to disable the progress bar of tqdm. You know some time when
+            you are fitting thousands of bayesian model, too many progress bar output
+            can be annoying.
         """
         if self.use_moment:
             self.alpha, self.beta = BayesianSmoothedClickrate.moment_solve(imps, clks)
@@ -181,7 +195,8 @@ class BayesianSmoothedClickrate:
                                                                          alpha=self.alpha,
                                                                          beta=self.beta,
                                                                          max_iter=self.max_iter,
-                                                                         epsilon=self.epsilon)
+                                                                         epsilon=self.epsilon,
+                                                                         verbose=verbose)
         return self
 
     def transform(self, imps, clks):
