@@ -4,11 +4,11 @@ import scipy.special as special
 from tqdm import tqdm
 
 
-np.random.seed(0)
+# np.random.seed(0)
 
 
 class BayesianSmoothedClickrate:
-    def __init__(self, alpha=1, beta=1, max_iter=1000, epsilon=1e-10,
+    def __init__(self, alpha=1, beta=1, max_iter=10000, epsilon=1e-10,
                  use_moment=False, use_fixed_point=True):
         self.alpha = alpha  # initial alpha
         self.beta = beta  # initial beta
@@ -66,7 +66,7 @@ class BayesianSmoothedClickrate:
         return alpha, beta
 
     @staticmethod
-    def iter_solve(imps, clks, alpha=1, beta=1, max_iter=1000, epsilon=1e-10, verbose=True):
+    def iter_solve(imps, clks, alpha=1, beta=1, max_iter=10000, epsilon=1e-10, verbose=True):
         """Solve alpha and beta with repeated fixed-point iterations.
 
         I strongly recommend a larger max_iter, like 10000, in this
@@ -90,7 +90,7 @@ class BayesianSmoothedClickrate:
             Initial value of beta.
 
         max_iter: int
-            Maximum number of iteration. default 1000.
+            Maximum number of iteration. default 10000.
 
         epsilon: float
             Epsilon in the fixed-point iterations. It specifies the threshold
@@ -201,6 +201,38 @@ class BayesianSmoothedClickrate:
 
     def transform(self, imps, clks):
         return BayesianSmoothedClickrate.static_transform(imps, clks, self.alpha, self.beta)
+
+    def fit_transform(self, imps, clks):
+        return self.fit(imps, clks).transform(imps, clks)
+
+
+class NaiveSmoothedClickrate:
+    def __init__(self):
+        self.num_lift = 0  # value to add at the numerator
+        self.denom_lift = 1  # value to add at the denominator
+
+    @staticmethod
+    def static_solve(imps, clks):
+        imps = np.array(imps)
+        clks = np.array(clks)
+        avg_imps = imps.mean()
+        avg_clks = clks.mean()
+        return avg_clks, avg_imps
+
+    @staticmethod
+    def static_transform(imps, clks, num_lift, denom_lift):
+        imps = np.array(imps)
+        clks = np.array(clks)
+        numerators = clks + num_lift
+        denominators = imps + denom_lift
+        return numerators / denominators
+
+    def fit(self, imps, clks):
+        self.num_lift, self.denom_lift = NaiveSmoothedClickrate.static_solve(imps, clks)
+        return self
+
+    def transform(self, imps, clks):
+        return NaiveSmoothedClickrate.static_transform(imps, clks, self.num_lift, self.denom_lift)
 
     def fit_transform(self, imps, clks):
         return self.fit(imps, clks).transform(imps, clks)
