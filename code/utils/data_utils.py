@@ -1,6 +1,9 @@
+import scipy.sparse as sparse
 import pandas as pd
 import pickle
+import tqdm
 import os
+import gc
 
 
 # path corrector
@@ -152,3 +155,56 @@ def load_user_feature_coocurrence(feat_name, stage="preliminary"):
         return load_preliminary_user_feature_coocurrence(feat_name)
     else:
         return None
+
+
+def quick_join(ad_user, user_feat_names=None, ad_feat_names=None, stage="preliminary"):
+    final_mat = None
+    feat_names = []
+
+    # load and join user features
+    if user_feat_names is not None and len(user_feat_names) > 0:
+        for feat_name in tqdm.tqdm(user_feat_names, desc="loading user matrices"):
+            uid_index, (val_to_index, cnt_feat) = load_user_cnt(feat_name, stage=stage)
+            uid_to_index = dict(zip(uid_index, list(range(len(uid_index)))))
+            join_index = ad_user['uid'].map(uid_to_index).values
+            user_mat = cnt_feat[join_index, :]
+            if final_mat is None:
+                final_mat = user_mat
+            else:
+                final_mat = sparse.hstack((final_mat, user_mat))
+                del user_mat
+                gc.collect()
+            feat_names += ["{}_{}".format(feat_name, val)
+                           for val, index in sorted(val_to_index.items(), key=lambda x: x[1])]
+
+            del cnt_feat
+            del join_index
+            del uid_to_index
+            del uid_index
+            del val_to_index
+            gc.collect()
+
+    # load and join ad features
+    if ad_feat_names is not None and len(ad_feat_names) > 0:
+        for feat_name in tqdm.tqdm(ad_feat_names, desc="loading ad matrices"):
+            aid_index, (val_to_index, cnt_feat) = load_ad_cnt(feat_name, stage=stage)
+            aid_to_index = dict(zip(aid_index, list(range(len(aid_index)))))
+            join_index = ad_user['aid'].map(aid_to_index).values
+            ad_mat = cnt_feat[join_index, :]
+            if final_mat is None:
+                final_mat = ad_mat
+            else:
+                final_mat = sparse.hstack((final_mat, ad_mat))
+                del ad_mat
+                gc.collect()
+            feat_names += ["{}_{}".format(feat_name, val) for val in val_to_index]
+
+            del cnt_feat
+            del join_index
+            del aid_to_index
+            del aid_index
+            del val_to_index
+            gc.collect()
+
+    assert final_mat.shape[1] == len(feat_names)
+    return final_mat, feat_names
