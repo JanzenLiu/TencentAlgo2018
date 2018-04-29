@@ -4,6 +4,7 @@ import pickle
 import tqdm
 import os
 import gc
+from scipy.sparse import hstack
 
 
 # path corrector
@@ -156,7 +157,6 @@ def load_user_feature_coocurrence(feat_name, stage="preliminary"):
     else:
         return None
 
-
 def quick_join(ad_user, user_feat_names=None, ad_feat_names=None, stage="preliminary"):
     final_mat = None
     feat_names = []
@@ -208,3 +208,45 @@ def quick_join(ad_user, user_feat_names=None, ad_feat_names=None, stage="prelimi
 
     assert final_mat.shape[1] == len(feat_names)
     return final_mat, feat_names
+
+def get_set(dataframe, test, features_u_want, a_features_u_want):
+    id_index_vec = []                        
+    for each in features_u_want:
+        id_index_vec.append(load_user_cnt(each))           #eid, (efeat_index, evec) = load_user_cnt("education")
+        
+    id2index = []                                        # mapping from uids to distinct indices
+    for each in id_index_vec:
+        id2index.append(dict(zip(each[0], list(range(len(each[0]))))))  # eid_to_index = dict(zip(eid, list(range(len(eid)))))
+        
+    # list of indices for matrix joining
+    index_mapper = []
+    for each in id2index:
+        index_mapper.append(dataframe['uid'].map(each).values)     # e_index = dataframe['uid'].map(eid_to_index).values
+        
+    # SAME AS ABOVE!
+    aid_index_vec = []
+    for each in a_features_u_want:
+        aid_index_vec.append(load_ad_cnt(each))
+    
+    aid2index = []
+    for each in aid_index_vec:
+        aid2index.append(dict(zip(each[0], list(range(len(each[0]))))))
+        
+    aindex_mapper = []
+    for each in aid2index:
+        aindex_mapper.append(dataframe['aid'].map(each).values)
+
+    temp_u = hstack([id_index_vec[i][1][1][index_mapper[i],:] for i in range((len(id_index_vec)))]) #把所有USER的所有特征的所有NLP_COUNT全部拼起来
+    temp_a = hstack([aid_index_vec[i][1][1][aindex_mapper[i],:] for i in range((len(aid_index_vec)))])
+    X = hstack([temp_u,temp_a]).tocsr()
+    """
+    X = hstack((avec[a_index,:], evec[e_index,:], i1vec[i1_index, :], i2vec[i2_index, :], i3vec[i3_index, :],
+               i4vec[i4_index, :], i5vec[i5_index, :], k1vec[k1_index, :], k2vec[k2_index, :], k3vec[k3_index, :], 
+               appvec[app_index, :], apivec[api_index, :])).tocsr()  # joined user and advertise matrix"""
+    if test==True:
+        return X
+    else:
+        y = (dataframe['label'].values + 1) / 2
+    
+    return X, y
+
