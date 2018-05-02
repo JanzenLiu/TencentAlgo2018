@@ -1,19 +1,31 @@
+import os
+
+
+def _correct_path(path):
+    return os.path.join(BASE_DIR, path)
+
+
 USER_FEAT_NAMES = ["age", "gender", "marriageStatus", "education", "consumptionAbility", "LBS",
-              "interest1", "interest2", "interest3", "interest4", "interest5",
-              "kw1", "kw2", "kw3", "topic1", "topic2", "topic3", "appIdInstall",
-              "appIdAction", "ct", "os", "carrier", "house"] # 23 in total
+                   "interest1", "interest2", "interest3", "interest4", "interest5",
+                   "kw1", "kw2", "kw3", "topic1", "topic2", "topic3", "appIdInstall",
+                   "appIdAction", "ct", "os", "carrier", "house"]  # 23 in total
 
 USER_SINGLE_FEAT_NAMES = ['age', 'gender', 'education', 'consumptionAbility', 'LBS',
-                  'carrier', 'house']  # one user has only one value
+                          'carrier', 'house']  # one user has only one value
 
 USER_MULTI_FEAT_NAMES = ['marriageStatus', 'interest1', 'interest2', 'interest3',
-                   'interest4', 'interest5', 'kw1', 'kw2', 'kw3', 'topic1',
-                   'topic2', 'topic3', 'appIdInstall', 'appIdAction', 'ct', 'os']  # 16 in total
+                         'interest4', 'interest5', 'kw1', 'kw2', 'kw3', 'topic1',
+                         'topic2', 'topic3', 'appIdInstall', 'appIdAction', 'ct', 'os']  # 16 in total
 
 AD_FEAT_NAMES = ['aid', 'advertiserId', 'campaignId', 'creativeId', 'creativeSize',
                  'adCategoryId', 'productId', 'productType']
 
-DATA_DIR = '/data'
+# paths as constants
+BASE_PATH = os.path.abspath(__file__)
+BASE_DIR = os.path.dirname(BASE_PATH)
+
+
+DATA_DIR = _correct_path('../data')
 PRELIMINARY_CONTEST_DATA_SUBDIR = '/preliminary_contest_data'
 
 RAW_DATA_DIR = '{}/raw'.format(DATA_DIR)
