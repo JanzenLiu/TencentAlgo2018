@@ -2,9 +2,12 @@ import os
 
 
 def _correct_path(path):
-    return os.path.join(BASE_DIR, path)
+    return os.path.abspath(os.path.join(BASE_DIR, path))
 
 
+# ==========================
+# Feature Names as Constants
+# ==========================
 USER_FEAT_NAMES = ["age", "gender", "marriageStatus", "education", "consumptionAbility", "LBS",
                    "interest1", "interest2", "interest3", "interest4", "interest5",
                    "kw1", "kw2", "kw3", "topic1", "topic2", "topic3", "appIdInstall",
@@ -20,10 +23,11 @@ USER_MULTI_FEAT_NAMES = ['marriageStatus', 'interest1', 'interest2', 'interest3'
 AD_FEAT_NAMES = ['aid', 'advertiserId', 'campaignId', 'creativeId', 'creativeSize',
                  'adCategoryId', 'productId', 'productType']
 
-# paths as constants
+# ==================
+# Paths as Constants
+# ==================
 BASE_PATH = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(BASE_PATH)
-
 
 DATA_DIR = _correct_path('../data')
 PRELIMINARY_CONTEST_DATA_SUBDIR = '/preliminary_contest_data'
