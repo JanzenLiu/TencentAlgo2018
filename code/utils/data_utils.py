@@ -157,6 +157,7 @@ def load_user_feature_coocurrence(feat_name, stage="preliminary"):
     else:
         return None
 
+
 def quick_join(ad_user, user_feat_names=None, ad_feat_names=None, stage="preliminary"):
     final_mat = None
     feat_names = []
@@ -209,12 +210,13 @@ def quick_join(ad_user, user_feat_names=None, ad_feat_names=None, stage="prelimi
     assert final_mat.shape[1] == len(feat_names)
     return final_mat, feat_names
 
+
 def get_set(dataframe, test, features_u_want, a_features_u_want):
     id_index_vec = []                        
     for each in features_u_want:
-        id_index_vec.append(load_user_cnt(each))           #eid, (efeat_index, evec) = load_user_cnt("education")
+        id_index_vec.append(load_user_cnt(each))  # eid, (efeat_index, evec) = load_user_cnt("education")
         
-    id2index = []                                        # mapping from uids to distinct indices
+    id2index = []  # mapping from uids to distinct indices
     for each in id_index_vec:
         id2index.append(dict(zip(each[0], list(range(len(each[0]))))))  # eid_to_index = dict(zip(eid, list(range(len(eid)))))
         
