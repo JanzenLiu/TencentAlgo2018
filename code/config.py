@@ -30,6 +30,7 @@ BASE_PATH = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(BASE_PATH)
 
 DATA_DIR = _correct_path('../data')
+INPUT_DIR = _correct_path('../data/input')
 PRELIMINARY_CONTEST_DATA_SUBDIR = '/preliminary_contest_data'
 
 RAW_DATA_DIR = '{}/raw'.format(DATA_DIR)
