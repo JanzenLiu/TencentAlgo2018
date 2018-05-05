@@ -1,4 +1,6 @@
 import pandas as pd
+import sys
+import os
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -126,3 +128,41 @@ class FileWriterGroup:
     def flush(self):
         for name, writer in self.writers.items():
             writer.flush()
+
+
+class DuplicatedLogger(object):
+    """Lumberjack class - duplicates sys.stdout to a log file.
+
+    Adapted from https://stackoverflow.com/q/616645
+    """
+
+    def __init__(self, filename, mode="a", buffer=10):
+        self.stdout = sys.stdout
+        self.file = open(filename, mode, buffer)
+        sys.stdout = self
+
+    def __del__(self):
+        self.close()
+
+    def __enter__(self):
+        pass
+
+    def __exit__(self, *args):
+        self.close()
+
+    def write(self, message):
+        self.stdout.write(message)
+        self.file.write(message)
+
+    def flush(self):
+        self.stdout.flush()
+        self.file.flush()
+        os.fsync(self.file.fileno())
+
+    def close(self):
+        if self.stdout is not None:
+            sys.stdout = self.stdout
+            self.stdout = None
+
+        if self.file is not None:
+            self.file.close()
