@@ -29,6 +29,7 @@ AD_FEAT_NAMES = ['aid', 'advertiserId', 'campaignId', 'creativeId', 'creativeSiz
 BASE_PATH = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(BASE_PATH)
 
+LOG_DIR = _correct_path('../log')
 DATA_DIR = _correct_path('../data')
 INPUT_DIR = _correct_path('../data/input')
 PRELIMINARY_CONTEST_DATA_SUBDIR = '/preliminary_contest_data'
