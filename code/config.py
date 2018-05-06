@@ -62,7 +62,7 @@ class DataPathFormatter:
             self.data_dir = data_dir
         self.input_dir = _correct_path('/input', self.data_dir)
 
-    def get_path(self, data_type, stage=None):
+    def get_path(self, data_type, stage=None, sub_dirs=[]):
         """Helper to get a certain sub directory path under the data directory
 
         Parameters
@@ -80,7 +80,10 @@ class DataPathFormatter:
         >>> dpf = DataPathFormatter()
         >>> get_path('raw', 'prelim')
         """
+        path = ''
         if stage is None:
-            return '{}/{}'.format(self.data_dir, data_type)
+            path = '{}/{}'.format(self.data_dir, data_type)
         elif stage == 'prelim':
-            return '{}/{}{}'.format(self.data_dir, data_type, PRELIMINARY_CONTEST_DATA_SUBDIR)
+            path = '{}/{}{}'.format(self.data_dir, data_type, PRELIMINARY_CONTEST_DATA_SUBDIR)
+        sub_dirs.insert(0, path)
+        return os.path.abspath(os.path.join(*sub_dirs))
