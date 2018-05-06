@@ -5,6 +5,10 @@ import tqdm
 import os
 import gc
 from scipy.sparse import hstack
+import sys
+sys.path.append('../')
+import config
+from config import DataPathFormatter
 
 
 # path corrector
@@ -16,16 +20,21 @@ def user_feature_path(feat_name):
     filename = "userFeature.[featureName='{}'].data".format(feat_name)
     return os.path.join(PRELIMINARY_USER_FEATURE_DIR, filename)
 
+# DataPathFormatter declaration
+exist_in_current_repo = os.path.exists(config.DATA_DIR)
+SERVER_DATA_DIR = os.path.join(config.BASE_DIR, '../../../zhangez698/TencentAlgo2018/data')
+#SERVER_DATA_DIR = os.path.join(config.BASE_DIR, '../../../data') # use this line after moving data out of elvin's dir
+dpf = DataPathFormatter(None if exist_in_current_repo else SERVER_DATA_DIR) # absolute path to /code
 
 # paths as constants
 BASE_PATH = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(BASE_PATH)
-PRELIMINARY_RAW_DATA_DIR = _correct_path('../../data/raw/preliminary_contest_data/')
-PRELIMINARY_AD_CNT_DIR = _correct_path('../../data/nlp_count/preliminary_contest_data/byAdFeatureName/')
-PRELIMINARY_USER_FEATURE_DIR = _correct_path('../../data/split/preliminary_contest_data/byUserFeatureName/')
-PRELIMINARY_USER_CNT_DIR = _correct_path('../../data/nlp_count/preliminary_contest_data/byUserFeatureName/')
-PRELIMINARY_USER_TFIDF_DIR = _correct_path('../../data/nlp_tfidf/preliminary_contest_data/byUserFeatureName/')
-PRELIMINARY_USER_COOC_DIR = _correct_path("../../data/nlp_cooccurrence/preliminary_contest_data/byUserFeatureName/")
+PRELIMINARY_RAW_DATA_DIR = dpf.get_path('raw', stage='prelim')
+PRELIMINARY_AD_CNT_DIR = dpf.get_path('nlp_count', stage='prelim', sub_dirs=['byAdFeatureName']) 
+PRELIMINARY_USER_FEATURE_DIR = dpf.get_path('split', stage='prelim', sub_dirs=['byUserFeatureName']) 
+PRELIMINARY_USER_CNT_DIR = dpf.get_path('nlp_count', stage='prelim', sub_dirs=['byUserFeatureName']) 
+PRELIMINARY_USER_TFIDF_DIR = dpf.get_path('nlp_tfidf', stage='prelim', sub_dirs=['byUserFeatureName'])
+PRELIMINARY_USER_COOC_DIR = dpf.get_path('nlp_cooccurrence', stage='prelim', sub_dirs=['byUserFeatureName'])
 PRELIMINARY_RAW_FILE_DICT = {
     "train": "train.csv",
     "test": "test1.csv",
