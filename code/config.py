@@ -1,10 +1,5 @@
 import os
 
-
-def _correct_path(path):
-    return os.path.abspath(os.path.join(BASE_DIR, path))
-
-
 # ==========================
 # Feature Names as Constants
 # ==========================
@@ -23,11 +18,16 @@ USER_MULTI_FEAT_NAMES = ['marriageStatus', 'interest1', 'interest2', 'interest3'
 AD_FEAT_NAMES = ['aid', 'advertiserId', 'campaignId', 'creativeId', 'creativeSize',
                  'adCategoryId', 'productId', 'productType']
 
-# ==================
+# ==========================================================
 # Paths as Constants
-# ==================
+# All of them are kept even after DataPathFormatter is added
+# Since removing them may break old files
+# ==========================================================
 BASE_PATH = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(BASE_PATH)
+
+def _correct_path(path, base=BASE_DIR):
+    return os.path.abspath(os.path.join(base, path))
 
 LOG_DIR = _correct_path('../log')
 DATA_DIR = _correct_path('../data')
@@ -49,3 +49,38 @@ PRELIM_VOCAB_DATA_DIR = '{}{}'.format(VOCAB_DATA_DIR, PRELIMINARY_CONTEST_DATA_S
 PRELIM_NLP_COUNT_DATA_DIR = '{}{}'.format(NLP_COUNT_DATA_DIR, PRELIMINARY_CONTEST_DATA_SUBDIR)
 PRELIM_NLP_TFIDF_DATA_DIR = '{}{}'.format(NLP_TFIDF_DATA_DIR, PRELIMINARY_CONTEST_DATA_SUBDIR)
 PRELIM_NLP_COOC_DATA_DIR = '{}{}'.format(NLP_COOC_DATA_DIR, PRELIMINARY_CONTEST_DATA_SUBDIR)
+
+
+# ===========================================================
+# Data Path Formatter to support shared data on remote server
+# ===========================================================
+class DataPathFormatter:
+    def __init__(self, data_dir=None):
+        if data_dir is None:
+            self.data_dir = DATA_DIR
+        else:
+            self.data_dir = data_dir
+        self.input_dir = _correct_path('/input', self.data_dir)
+
+    def get_path(self, data_type, stage=None):
+        """Helper to get a certain sub directory path under the data directory
+
+        Parameters
+        ----------
+        data_type: string
+            sub directory name under /data, eg. 'raw', 'split', 'counter', 'vocabulary', etc
+
+        stage: string
+            currently it's one of ['prelim', None].
+            If None, it's the general sub directory path. eg. /data/raw.
+            If 'prelim', it's specifically for preliminary contest data. eg, /data/raw/preliminary_contest_data.
+
+        Examples
+        --------
+        >>> dpf = DataPathFormatter()
+        >>> get_path('raw', 'prelim')
+        """
+        if stage is None:
+            return '{}/{}'.format(self.data_dir, data_type)
+        elif stage == 'prelim':
+            return '{}/{}{}'.format(self.data_dir, data_type, PRELIMINARY_CONTEST_DATA_SUBDIR)
