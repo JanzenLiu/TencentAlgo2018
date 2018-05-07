@@ -27,7 +27,9 @@ SERVER_DATA_DIR = os.path.join(config.BASE_DIR, '../../../zhangez698/TencentAlgo
 # SERVER_DATA_DIR = os.path.join(config.BASE_DIR, '../../../data')  # use this line after moving data out of elvin's dir
 dpf = DataPathFormatter(None if exist_in_current_repo else SERVER_DATA_DIR)  # absolute path to /code
 
-# paths as constants
+# =============
+# Path Constant
+# =============
 BASE_PATH = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(BASE_PATH)
 PRELIMINARY_RAW_DATA_DIR = dpf.get_path('raw', stage='prelim')
