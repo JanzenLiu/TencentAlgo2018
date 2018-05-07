@@ -6,7 +6,7 @@ import os
 import gc
 from scipy.sparse import hstack
 import sys
-sys.path.append('../')
+sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 import config
 from config import DataPathFormatter
 
@@ -20,11 +20,12 @@ def user_feature_path(feat_name):
     filename = "userFeature.[featureName='{}'].data".format(feat_name)
     return os.path.join(PRELIMINARY_USER_FEATURE_DIR, filename)
 
+
 # DataPathFormatter declaration
 exist_in_current_repo = os.path.exists(config.DATA_DIR)
 SERVER_DATA_DIR = os.path.join(config.BASE_DIR, '../../../zhangez698/TencentAlgo2018/data')
-#SERVER_DATA_DIR = os.path.join(config.BASE_DIR, '../../../data') # use this line after moving data out of elvin's dir
-dpf = DataPathFormatter(None if exist_in_current_repo else SERVER_DATA_DIR) # absolute path to /code
+# SERVER_DATA_DIR = os.path.join(config.BASE_DIR, '../../../data')  # use this line after moving data out of elvin's dir
+dpf = DataPathFormatter(None if exist_in_current_repo else SERVER_DATA_DIR)  # absolute path to /code
 
 # paths as constants
 BASE_PATH = os.path.abspath(__file__)
