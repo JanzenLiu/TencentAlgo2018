@@ -218,12 +218,12 @@ def get_set(dataframe, test, features_u_want, a_features_u_want):
         
     id2index = []  # mapping from uids to distinct indices
     for each in id_index_vec:
-        id2index.append(dict(zip(each[0], list(range(len(each[0]))))))  # eid_to_index = dict(zip(eid, list(range(len(eid)))))
+        id2index.append(dict(zip(each[0], list(range(len(each[0]))))))
         
     # list of indices for matrix joining
     index_mapper = []
     for each in id2index:
-        index_mapper.append(dataframe['uid'].map(each).values)     # e_index = dataframe['uid'].map(eid_to_index).values
+        index_mapper.append(dataframe['uid'].map(each).values)  # e_index = dataframe['uid'].map(eid_to_index).values
         
     # SAME AS ABOVE!
     aid_index_vec = []
@@ -238,17 +238,15 @@ def get_set(dataframe, test, features_u_want, a_features_u_want):
     for each in aid2index:
         aindex_mapper.append(dataframe['aid'].map(each).values)
 
-    temp_u = hstack([id_index_vec[i][1][1][index_mapper[i],:] for i in range((len(id_index_vec)))]) #把所有USER的所有特征的所有NLP_COUNT全部拼起来
-    temp_a = hstack([aid_index_vec[i][1][1][aindex_mapper[i],:] for i in range((len(aid_index_vec)))])
-    X = hstack([temp_u,temp_a]).tocsr()
-    """
-    X = hstack((avec[a_index,:], evec[e_index,:], i1vec[i1_index, :], i2vec[i2_index, :], i3vec[i3_index, :],
-               i4vec[i4_index, :], i5vec[i5_index, :], k1vec[k1_index, :], k2vec[k2_index, :], k3vec[k3_index, :], 
-               appvec[app_index, :], apivec[api_index, :])).tocsr()  # joined user and advertise matrix"""
-    if test==True:
+    temp_u = hstack([id_index_vec[i][1][1][index_mapper[i], :] for i in range((len(id_index_vec)))])  # USER NLP_COUNT
+    temp_a = hstack([aid_index_vec[i][1][1][aindex_mapper[i], :] for i in range((len(aid_index_vec)))])
+    X = hstack([temp_u, temp_a]).tocsr()
+    # X = hstack((avec[a_index,:], evec[e_index,:], i1vec[i1_index, :], i2vec[i2_index, :], i3vec[i3_index, :],
+    #            i4vec[i4_index, :], i5vec[i5_index, :], k1vec[k1_index, :], k2vec[k2_index, :], k3vec[k3_index, :],
+    #            appvec[app_index, :], apivec[api_index, :])).tocsr()  # joined user and advertise matrix
+    if test:
         return X
     else:
         y = (dataframe['label'].values + 1) / 2
     
     return X, y
-
