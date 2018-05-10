@@ -37,6 +37,17 @@ class DataManager:
         return Data(self.folder, *middle_names)
 
 
+class CrossBinaryDataManager:
+    @staticmethod
+    def build_data(ad_feat_name, user_feat_name):
+        folder = os.path.join(config.PRELIM_NLP_COUNT_DATA_DIR,
+                              "simple_cross",
+                              "byUserFeatureName",
+                              "[featureName='{}']".format(user_feat_name))
+        middle_names = ("[adFeatureName='{}']".format(ad_feat_name), "binary")
+        return Data(folder, *middle_names)
+
+
 class DataUnion:
     def __init__(self, *data_instances):
         self.data_instances = data_instances
