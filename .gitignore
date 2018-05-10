@@ -27,3 +27,4 @@ playground/Janzen/model/*
 playground/Janzen/output/*
 playground/Janzen/**/*_original.ipynb
 playground/Janzen/**/*.dffm.bin
+playground/Lily/**/*.pth
