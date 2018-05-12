@@ -14,6 +14,12 @@
 # Submission
 **/subm/*
 
+# Binary Executable
+**/bin/*
+
+# Model
+**/model/*
+
 # Personal stuff
 playground/Janzen/bin/*
 playground/Janzen/data/*
