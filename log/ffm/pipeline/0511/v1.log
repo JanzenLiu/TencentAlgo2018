@@ -1,0 +1,30 @@
+First check if the text file has already been converted to binary format (0.0 seconds)
+Binary file NOT found. Convert text file to binary file (112.7 seconds)
+First check if the text file has already been converted to binary format (0.0 seconds)
+Binary file NOT found. Convert text file to binary file (29.8 seconds)
+iter   tr_logloss   va_logloss      tr_time
+   1      0.18098      0.17718        158.3
+   2      0.17577      0.17545        316.3
+   3      0.17425      0.17456        473.7
+   4      0.17329      0.17410        635.8
+   5      0.17255      0.17368        802.0
+   6      0.17197      0.17343        968.1
+   7      0.17148      0.17315       1134.0
+   8      0.17103      0.17300       1299.5
+   9      0.17063      0.17285       1465.5
+  10      0.17026      0.17271       1631.6
+  11      0.16992      0.17267       1797.7
+  12      0.16960      0.17254       1964.4
+  13      0.16928      0.17246       2129.8
+  14      0.16898      0.17240       2295.4
+  15      0.16869      0.17235       2462.8
+  16      0.16841      0.17234       2628.5
+  17      0.16814      0.17224       2794.4
+  18      0.16787      0.17222       2960.5
+  19      0.16760      0.17216       3125.9
+  20      0.16735      0.17215       3291.8
+  21      0.16709      0.17210       3458.0
+  22      0.16684      0.17210       3623.7
+  23      0.16659      0.17210       3789.0
+  24      0.16635      0.17206       3955.4
+  25      0.16611      0.17213       4121.1
