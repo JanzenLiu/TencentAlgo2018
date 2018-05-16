@@ -1,6 +1,7 @@
 import scipy.sparse as sparse
 import pandas as pd
-import pickle
+# import pickle
+import joblib
 import tqdm
 import os
 import gc
@@ -49,14 +50,12 @@ PRELIMINARY_RAW_FILE_DICT = {
 # Pickle Handler
 # ==============
 def load_pickle(filepath):
-    with open(filepath, "rb") as f:
-        obj = pickle.load(f)
+    obj = joblib.load(filepath)
     return obj
 
 
 def save_pickle(obj, filepath):
-    with open(filepath, "wb") as f:
-        pickle.dump(obj, f)
+    joblib.dump(obj, filepath)
 
 
 # =======================
