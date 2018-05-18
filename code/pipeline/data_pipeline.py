@@ -1,4 +1,5 @@
 import scipy.sparse as sparse
+import numpy as np
 import os
 import gc
 import sys
@@ -48,6 +49,16 @@ class CrossBinaryDataManager:
         return Data(folder, *middle_names)
 
 
+class EmbeddingDataManager:
+    @staticmethod
+    def build_data(feat_name, pooling="avg", version_no=1):
+        folder = os.path.join(config.DATA_DIR,
+                              "embedding",
+                              "[featureName='{}']".format(feat_name))
+        middle_names = ("{}_v{}".format(pooling, version_no), )
+        return Data(folder, *middle_names)
+
+
 class DataUnion:
     def __init__(self, *data_instances):
         self.data_instances = data_instances
@@ -67,7 +78,10 @@ class DataUnion:
                 matrix = matrix_new
             else:
                 assert matrix.shape[0] == matrix_new.shape[0]
-                matrix = sparse.hstack((matrix, matrix_new))
+                if isinstance(matrix, (sparse.csr_matrix, sparse.csc_matrix)):
+                    matrix = sparse.hstack((matrix, matrix_new))
+                else:
+                    matrix = np.hstack((matrix, matrix_new))
                 del matrix_new
                 gc.collect()
 
