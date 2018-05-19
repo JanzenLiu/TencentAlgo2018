@@ -28,3 +28,4 @@ playground/Janzen/output/*
 playground/Janzen/**/*_original.ipynb
 playground/Janzen/**/*.dffm.bin
 playground/Lily/**/*.pth
+playground/Lily/**/*.pkl
