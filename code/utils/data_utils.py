@@ -1,7 +1,7 @@
 import scipy.sparse as sparse
 import pandas as pd
 # import pickle
-import joblib
+from sklearn.externals import joblib
 import tqdm
 import os
 import gc
