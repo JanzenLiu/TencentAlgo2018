@@ -59,6 +59,16 @@ class EmbeddingDataManager:
         return Data(folder, *middle_names)
 
 
+class ListClickrateDataManager:
+    @staticmethod
+    def build_data(ad_feat_name, user_feat_name):
+        folder = os.path.join(config.DATA_DIR,
+                              "stacking",
+                              "clickrate")
+        middle_names = ("[adFeatureName='{}'][userFeatureName='{}']".format(ad_feat_name, user_feat_name), )
+        return Data(folder, *middle_names)
+
+
 class DataUnion:
     def __init__(self, *data_instances):
         self.data_instances = data_instances
@@ -78,7 +88,7 @@ class DataUnion:
                 matrix = matrix_new
             else:
                 assert matrix.shape[0] == matrix_new.shape[0]
-                if isinstance(matrix, (sparse.csr_matrix, sparse.csc_matrix)):
+                if isinstance(matrix, (sparse.csr_matrix, sparse.csc_matrix, sparse.coo_matrix)):
                     matrix = sparse.hstack((matrix, matrix_new))
                 else:
                     matrix = np.hstack((matrix, matrix_new))
