@@ -1,8 +1,16 @@
 import pandas as pd
+import tqdm
 import sys
 import os
 from contextlib import contextmanager
 from pathlib import Path
+
+
+def count_file_lines(filepath, verbose=False):
+    f = open(filepath)
+    for i, l in tqdm.tqdm(enumerate(f.readlines()), disable=(not verbose)):
+        pass
+    return i + 1
 
 
 @contextmanager
@@ -117,6 +125,10 @@ class FileWriterGroup:
 
     def write_buffer(self, name, chars):
         self.writers[name].write_buffer(chars)
+
+    def write_buffers(self, chars):
+        for name, writer in self.writers.items():
+            writer.write_buffer(chars)
 
     def clear_buffer(self, name):
         self.writers[name].clear_buffer()
