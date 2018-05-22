@@ -1,7 +1,10 @@
 import scipy.sparse as sparse
 import pandas as pd
-# import pickle
-import joblib
+import pickle
+try:
+    import joblib
+except ImportError:
+    from sklearn.externals import joblib
 import tqdm
 import os
 import gc
@@ -42,6 +45,7 @@ PRELIMINARY_USER_COOC_DIR = dpf.get_path('nlp_cooccurrence', stage='prelim', sub
 PRELIMINARY_RAW_FILE_DICT = {
     "train": "train.csv",
     "test": "test1.csv",
+    "test2": "test2.csv",
     "ad": "adFeature.csv",
  }
 
@@ -49,13 +53,24 @@ PRELIMINARY_RAW_FILE_DICT = {
 # ==============
 # Pickle Handler
 # ==============
-def load_pickle(filepath):
-    obj = joblib.load(filepath)
+def load_pickle(filepath, use_joblib=False):
+    if use_joblib:
+        obj = joblib.load(filepath)
+    else:
+        try:
+            with open(filepath, "rb") as f:
+                obj = pickle.load(f)
+        except Exception:
+            obj = joblib.load(filepath)
     return obj
 
 
-def save_pickle(obj, filepath):
-    joblib.dump(obj, filepath)
+def save_pickle(obj, filepath, use_joblib=False):
+    if use_joblib:
+        joblib.dump(obj, filepath)
+    else:
+        with open(filepath, "wb") as f:
+            pickle.dump(obj, f)
 
 
 # =======================
@@ -169,13 +184,13 @@ def load_user_feature_coocurrence(feat_name, stage="preliminary"):
         return None
 
 
-def quick_join(ad_user, user_feat_names=None, ad_feat_names=None, stage="preliminary"):
+def quick_join(ad_user, user_feat_names=None, ad_feat_names=None, stage="preliminary", verbose=True):
     final_mat = None
     feat_names = []
 
     # load and join user features
     if user_feat_names is not None and len(user_feat_names) > 0:
-        for feat_name in tqdm.tqdm(user_feat_names, desc="loading user matrices"):
+        for feat_name in tqdm.tqdm(user_feat_names, desc="loading user matrices", disable=(not verbose)):
             uid_index, (val_to_index, cnt_feat) = load_user_cnt(feat_name, stage=stage)
             uid_to_index = dict(zip(uid_index, list(range(len(uid_index)))))
             join_index = ad_user['uid'].map(uid_to_index).values
@@ -198,7 +213,7 @@ def quick_join(ad_user, user_feat_names=None, ad_feat_names=None, stage="prelimi
 
     # load and join ad features
     if ad_feat_names is not None and len(ad_feat_names) > 0:
-        for feat_name in tqdm.tqdm(ad_feat_names, desc="loading ad matrices"):
+        for feat_name in tqdm.tqdm(ad_feat_names, desc="loading ad matrices", disable=(not verbose)):
             aid_index, (val_to_index, cnt_feat) = load_ad_cnt(feat_name, stage=stage)
             aid_to_index = dict(zip(aid_index, list(range(len(aid_index)))))
             join_index = ad_user['aid'].map(aid_to_index).values
