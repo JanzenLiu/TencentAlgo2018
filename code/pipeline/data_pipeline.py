@@ -1,5 +1,6 @@
 import scipy.sparse as sparse
 import numpy as np
+import tqdm
 import os
 import gc
 import sys
@@ -76,7 +77,7 @@ class DataUnion:
     def load(self, dataset="train"):
         cols = []
         matrix = None
-        for data in self.data_instances:
+        for data in tqdm.tqdm(self.data_instances, desc="loading data"):
             # load data
             cols_new, matrix_new = data.load(dataset)
 
@@ -88,7 +89,8 @@ class DataUnion:
                 matrix = matrix_new
             else:
                 assert matrix.shape[0] == matrix_new.shape[0]
-                if isinstance(matrix, (sparse.csr_matrix, sparse.csc_matrix, sparse.coo_matrix)):
+                sparse_types = (sparse.csr_matrix, sparse.csc_matrix, sparse.coo_matrix)
+                if isinstance(matrix, sparse_types) or isinstance(matrix_new, sparse_types):
                     matrix = sparse.hstack((matrix, matrix_new))
                 else:
                     matrix = np.hstack((matrix, matrix_new))
