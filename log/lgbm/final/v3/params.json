@@ -1,0 +1,11 @@
+{
+    "objective": "binary",
+    "metric": "auc",
+    "learning_rate": 0.16,
+    "verbose": 0,
+    "max_depth": 6,
+    "num_leaves": 64,
+    "boosting_type": "gbdt",
+    "feature_fraction": 0.8,
+    "bagging_fraction": 0.8
+}
