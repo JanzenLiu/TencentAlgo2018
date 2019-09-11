@@ -26,12 +26,15 @@ AD_FEAT_NAMES = ['aid', 'advertiserId', 'campaignId', 'creativeId', 'creativeSiz
 BASE_PATH = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(BASE_PATH)
 
+
 def _correct_path(path, base=BASE_DIR):
     return os.path.abspath(os.path.join(base, path))
+
 
 LOG_DIR = _correct_path('../log')
 DATA_DIR = _correct_path('../data')
 INPUT_DIR = _correct_path('../data/input')
+PROJECT_DIR = _correct_path('../')
 PRELIMINARY_CONTEST_DATA_SUBDIR = '/preliminary_contest_data'
 
 RAW_DATA_DIR = '{}/raw'.format(DATA_DIR)

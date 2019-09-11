@@ -4,6 +4,7 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib.colors import Colormap  # for type annotation
 
+
 def get_cmap(n, name='hsv') -> Colormap:
     """Construct a `Colormap` instance that maps integer indices to distinct colors
 
@@ -293,6 +294,7 @@ class SingleFeatureVisualizer:
             plt.title(title)
             if savepath is not None:
                 plt.savefig(savepath)
+                plt.show()
 
     @staticmethod
     def plot_categorical_feats(df, cat_cols=None, ncols=3, height_per_plot=6, savepath=None):
