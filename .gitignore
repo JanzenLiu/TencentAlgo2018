@@ -20,10 +20,16 @@
 # Model
 **/model/*
 
-# Personal stuff
-playground/Janzen/bin/*
-playground/Janzen/data/*
-playground/Janzen/model/*
-playground/Janzen/output/*
-playground/Janzen/**/*_original.ipynb
-playground/Janzen/**/*.dffm.bin
+# Local stuff
+bin/*
+data/*
+model/*
+ouptut/*
+**/*_original.ipynb
+**/*.dffm.bin
+# playground/Janzen/bin/*
+# playground/Janzen/data/*
+# playground/Janzen/model/*
+# playground/Janzen/output/*
+# playground/Janzen/**/*_original.ipynb
+# playground/Janzen/**/*.dffm.bin
