@@ -25,8 +25,8 @@
 - [ ] Try PNN (Polynominal Neural Networks)
 - [ ] Try matrix decomposition (MF, SVD/SVD++, SVD for RecSys etc.)
 - [ ] Try sklearn FeatureUnion and Pipeline
-- [ ] Try tuning hyperparameters with hyperopt
-- [ ] Try stacking
+- [x] Try tuning hyperparameters with hyperopt
+- [x] Try stacking
 - [ ] Try ensemble with raw features involved (my idea)
 - [ ] Try synthetic oversampling
 - [ ] Try cost-sensitive learning for imbalanced data (not only with imbalenced labels, but also features)
@@ -35,7 +35,7 @@
 - [ ] Try TSNE
 - [x] Add simple data visualization
 - [x] Add simple testing
-- [ ] Implement (or just copy from somewhere) Bayesian smoothing for CTR/CVR
+- [x] Implement (or just copy from somewhere) Bayesian smoothing for CTR/CVR
 - [ ] Implement simple A/B test
 - [ ] Implement a full tunable and testable pipeline (it's fine to be simple, but it must be complete)
 - [x] Fix globals problem in info_utils
